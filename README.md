@@ -27,7 +27,7 @@ Una aplicación web moderna para la gestión de finanzas personales, construida 
 
 1. Clona el repositorio:
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/idgleb/finanzas-app.git
 cd finanzas-app
 ```
 
@@ -82,4 +82,10 @@ Las contribuciones son bienvenidas. Por favor, lee las guías de contribución a
 
 ## 📧 Contacto
 
-[Tu información de contacto]
+[@idgleb](https://github.com/idgleb)
+
+## 📊 Estadísticas del Proyecto
+
+- PHP: 62.7%
+- Blade: 35.9%
+- Otros: 1.4%
