@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos base para botones de paginación */
+.my-custom-prev,
+.my-custom-next,
+.my-custom-page {
+    background-color: white; /* color de fondo base */
+    transition: background-color 0.3s ease;
+}
+
+/* Hover para los botones prev, next y los números */
+.my-custom-prev:hover,
+.my-custom-next:hover,
+.my-custom-page:hover {
+    background-color: #abc2ff; /* color de fondo en hover */
+    color: white;
+
+}
+
+/* Estilos para botones activos (pagina actual) */
+.my-custom-prev-active,
+.my-custom-next-active,
+.my-custom-page-active {
+    background-color: #1e3a8a; /* color de fondo para la página activa */
+    transition: background-color 0.3s ease;
+}
+
+
+
+
+
+/* Estilo personalizado para todos los h2 */
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e3a8a; /* Azul oscuro */
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+}
+
+/* Botón primario personalizado */
+.btn-finanzas {
+    background-color: #1e3a8a;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
+    transition: all 0.3s ease-in-out;
+    border: none;
+    display: inline-block;
+}
+
+.btn-finanzas:hover {
+    background-color: #163c6d;
+    box-shadow: 0 6px 18px rgba(30, 58, 138, 0.2);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* Botón de borde (outline) */
+.btn-outline-finanzas {
+    background-color: transparent;
+    color: #1e3a8a;
+    border: 2px solid #1e3a8a;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.btn-outline-finanzas:hover {
+    background-color: #1e3a8a;
+    color: white;
+    box-shadow: 0 6px 18px rgba(30, 58, 138, 0.15);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* Enlace de texto */
+.link-finanzas {
+    color: #6c757d;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.link-finanzas:hover {
+    color: #1e3a8a;
+}
+
+
+
+
+

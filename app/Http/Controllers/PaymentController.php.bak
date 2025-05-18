@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+// 1) Configuración
+use MercadoPago\MercadoPagoConfig;
+
+// 2) Cliente de preferencias
+use MercadoPago\Client\Preference\PreferenceClient;
+
+// 3) Excepción de la API
+use MercadoPago\Exceptions\MPApiException;
+
+class PaymentController extends Controller
+{
+    public function index()
+    {
+        return view('payments.index');
+    }
+
+
+    public function process(Request $request)
+    {
+
+        //  Armar los ítems
+        $items = [[
+            'title' => 'Plan PRO - Finanzas App',
+            'quantity' => 1,
+            'unit_price' => 1,
+            'currency_id' => 'ARS',
+        ]];
+        //  URLs de retorno
+        $backUrls = [
+            "success" => "https://9d91-190-51-174-167.ngrok-free.app/payments/success",
+            "failure" => "https://9d91-190-51-174-167.ngrok-free.app/payments/failure",
+            "pending" => "https://9d91-190-51-174-167.ngrok-free.app/payments/pending",
+        ];
+
+        //  Payload de la preferencia
+        $preferenceData = [
+            'items' => $items,
+            'back_urls' => $backUrls,
+            'auto_return' => 'approved',
+        ];
+
+        //  Crear la preferencia usando el cliente
+        $client = new PreferenceClient();
+        $preference = $client->create($preferenceData);
+
+        //  Redirigir al punto de pago
+        return redirect($preference->init_point);
+
+    }
+
+
+}
