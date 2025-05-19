@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Plan;
+use App\Models\Category;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,38 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'plan_id' => Plan::getFreePlan()->id,
         ]);
+
+        // Crear categorías predeterminadas para el nuevo usuario
+        $categorias = [
+            'gasto' => [
+                ['nombre' => 'Comida', 'icono' => '🍔'],
+                ['nombre' => 'Transporte', 'icono' => '🚗'],
+                ['nombre' => 'Alquiler', 'icono' => '🏠'],
+                ['nombre' => 'Salud', 'icono' => '💊'],
+                ['nombre' => 'Entretenimiento', 'icono' => '🎮'],
+                ['nombre' => 'Ropa', 'icono' => '👕'],
+                ['nombre' => 'Educación', 'icono' => '📚'],
+            ],
+            'ingreso' => [
+                ['nombre' => 'Sueldo', 'icono' => '💼'],
+                ['nombre' => 'Freelance', 'icono' => '🧑‍💻'],
+                ['nombre' => 'Inversiones', 'icono' => '📈'],
+                ['nombre' => 'Regalos', 'icono' => '🎁'],
+                ['nombre' => 'Venta de productos', 'icono' => '🛒'],
+            ],
+        ];
+
+        foreach ($categorias as $tipo => $items) {
+            foreach ($items as $item) {
+                Category::create([
+                    'nombre' => $item['nombre'],
+                    'icono' => $item['icono'],
+                    'tipo' => $tipo,
+                    'user_id' => $user->id,
+                    'activa' => true,
+                ]);
+            }
+        }
 
         event(new Registered($user));
 
