@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('user'); // 'user' o 'admin'
-            $table->string('plan')->default('free'); // 'free' o 'pro'
+            $table->foreignId('plan_id')->constrained('plans');
             $table->string('zona_horaria')->nullable(); // Zona horaria del usuario
 
             $table->rememberToken();

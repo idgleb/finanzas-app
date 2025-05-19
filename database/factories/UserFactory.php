@@ -28,13 +28,12 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => 'user',         // Valor por defecto
-            'plan' => 'free',         // Valor por defecto
-            'zona_horaria' => 'America/Argentina/Buenos_Aires', // Zona horaria por defecto
             'remember_token' => Str::random(10),
+            'role' => 'user',
+            'plan_id' => \App\Models\Plan::where('code', 'free')->first()->id,
+            'zona_horaria' => 'America/Argentina/Buenos_Aires',
         ];
     }
-
 
     /**
      * Indicate that the model's email address should be unverified.

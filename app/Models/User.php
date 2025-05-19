@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -25,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'plan',
+        'plan_id',
         'zona_horaria',
     ];
 
@@ -52,23 +53,58 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['plan'];
+
+    /**
+     * Obtiene los movimientos del usuario
+     */
     public function movements(): HasMany
     {
         return $this->hasMany(Movement::class);
     }
 
+    /**
+     * Obtiene las categorías del usuario
+     */
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
 
-    public function isPro(): bool
+    /**
+     * Obtiene el plan del usuario
+     */
+    public function plan(): BelongsTo
     {
-        return $this->plan === 'pro';
+        return $this->belongsTo(Plan::class);
     }
 
+    /**
+     * Verifica si el usuario tiene plan PRO
+     */
+    public function isPro(): bool
+    {
+        return $this->plan_id && $this->plan && $this->plan->isPro();
+    }
+
+    /**
+     * Verifica si el usuario es administrador
+     */
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Verifica si el usuario tiene plan gratuito
+     */
+    public function isFree(): bool
+    {
+        return $this->plan_id && $this->plan && $this->plan->isFree();
     }
 }

@@ -23,6 +23,9 @@ Una aplicación web moderna para la gestión de finanzas personales, construida 
 - Node.js y npm
 - Git
 
+## 📚 Diagrama de entidad-relacion (ER)
+
+
 ## 🚀 Instalación
 
 1. Clona el repositorio:

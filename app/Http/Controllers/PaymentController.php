@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -21,8 +22,6 @@ use MercadoPago\Exceptions\MPApiException;
 
 class PaymentController extends Controller
 {
-    private $ngrokUrl = 'https://33be-190-51-174-167.ngrok-free.app';
-
     public function __construct()
     {
         // Configurar el token de acceso de Mercado Pago desde .env
@@ -106,7 +105,7 @@ class PaymentController extends Controller
                     'trace' => $e->getTraceAsString(),
                     'preference_data' => $preferenceData
                 ]);
-                
+
                 return redirect()->route('payments.pro-required')
                     ->with('error', 'Error al procesar el pago. Por favor, intente nuevamente más tarde.');
             }
@@ -115,7 +114,7 @@ class PaymentController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->route('payments.pro-required')
                 ->with('error', 'Ha ocurrido un error inesperado. Por favor, intente nuevamente más tarde.');
         }
@@ -136,15 +135,20 @@ class PaymentController extends Controller
                 $payment = $client->get($paymentId);
 
                 if ($payment->status === 'approved') {
-                    // Actualizar el plan del usuario a 'pro'
+                    // Actualizar el plan del usuario a PRO
                     $user = Auth::user();
-                    $user->plan = 'pro';
-                    $user->save();
+                    $planPro = Plan::getProPlan();
+                    
+                    if ($planPro) {
+                        $user->plan_id = $planPro->id;
+                        $user->save();
 
-                    Log::info('Plan actualizado a PRO desde success', [
-                        'user_id' => $user->id,
-                        'payment_id' => $paymentId
-                    ]);
+                        Log::info('Plan actualizado a PRO desde success', [
+                            'user_id' => $user->id,
+                            'plan_id' => $planPro->id,
+                            'payment_id' => $paymentId
+                        ]);
+                    }
                 }
             } catch (\Exception $e) {
                 Log::error('Error al verificar pago en success', [
@@ -207,7 +211,7 @@ class PaymentController extends Controller
                 if ($merchantOrderId) {
                     try {
                         Log::info('Obteniendo información de merchant_order', ['merchant_order_id' => $merchantOrderId]);
-                        
+
                         $client = new \MercadoPago\Client\MerchantOrder\MerchantOrderClient();
                         $order = $client->get($merchantOrderId);
 
@@ -253,7 +257,7 @@ class PaymentController extends Controller
 
             try {
                 Log::info('Obteniendo información del pago', ['payment_id' => $paymentId]);
-                
+
                 $client = new PaymentClient();
                 $payment = $client->get($paymentId);
 
@@ -266,16 +270,18 @@ class PaymentController extends Controller
                 ]);
 
                 if ($payment->status === 'approved') {
-                    $user = \App\Models\User::find($payment->external_reference);
+                    $user = User::find($payment->external_reference);
+                    $planPro = Plan::getProPlan();
 
-                    if ($user) {
-                        if ($user->plan !== 'pro') {
-                            $user->plan = 'pro';
+                    if ($user && $planPro) {
+                        if (!$user->isPro()) {
+                            $user->plan_id = $planPro->id;
                             $user->save();
 
                             Log::info('Plan actualizado a PRO para usuario', [
                                 'user_id' => $user->id,
                                 'email' => $user->email,
+                                'plan_id' => $planPro->id,
                                 'payment_id' => $paymentId
                             ]);
                         } else {
@@ -286,13 +292,13 @@ class PaymentController extends Controller
                             ]);
                         }
                     } else {
-                        Log::error('Usuario no encontrado para el pago', [
+                        Log::error('Usuario o plan no encontrado para el pago', [
                             'external_reference' => $payment->external_reference,
                             'payment_id' => $paymentId
                         ]);
                         return response()->json([
                             'status' => 'error',
-                            'message' => 'Usuario no encontrado'
+                            'message' => 'Usuario o plan no encontrado'
                         ], 404);
                     }
                 } else {
