@@ -24,7 +24,7 @@ Una aplicación web moderna para la gestión de finanzas personales, construida 
 - Git
 
 ## 📚 Diagrama de entidad-relacion (ER)
-
+![er-diagrama-finansas](https://github.com/user-attachments/assets/233edea6-3e45-46d9-81e4-9236913bc0a1)
 
 ## 🚀 Instalación
 
