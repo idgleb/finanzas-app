@@ -1,6 +1,5 @@
 # Finanzas App 💸
-
-![Banner](https://via.placeholder.com/1200x200.png?text=Finanzas+App+-+Tus+Finanzas+Organizadas)  
+ 
 **🌐 Una aplicación Laravel para gestionar finanzas con pagos PRO vía tarjeta usando Mercado Pago.**
 
 ## ✨ Descripción
