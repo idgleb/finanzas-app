@@ -6,6 +6,14 @@ use App\Models\Movement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+/**
+ * Retrieves and prepares dashboard data for the authenticated user.
+ *
+ * Calculates total income, expenses, balance, monthly financial trends,
+ * and expense categories for rendering in the dashboard view.
+ *
+ * @return \Illuminate\View\View Dashboard view with financial metrics
+ */
 
 
 class DashboardUserController extends Controller

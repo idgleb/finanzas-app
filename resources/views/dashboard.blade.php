@@ -66,7 +66,10 @@
 
         const categoryLabels = @json($categoryLabels);
         const categoryTotals = @json($categoryTotals);
-        const colors = ['#60a5fa','#f472b6','#34d399','#fbbf24','#a78bfa','#f87171','#4ade80'];
+        const colors = categoryTotals.map((_, i) =>
+            `hsl(${(i * 360) / categoryTotals.length}, 70%, 50%)`
+        );
+
 
         new Chart(document.getElementById('categoryChart'), {
             type: 'doughnut',
