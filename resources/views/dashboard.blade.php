@@ -28,12 +28,15 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-4 rounded shadow">
                 <canvas id="monthlyChart" height="200"></canvas>
             </div>
             <div class="bg-white p-4 rounded shadow">
                 <canvas id="categoryChart" height="200"></canvas>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <canvas id="incomeCategoryChart" height="200"></canvas>
             </div>
         </div>
 
@@ -86,6 +89,33 @@
                 datasets: [{
                     data: categoryTotals,
                     backgroundColor: colors.slice(0, categoryTotals.length)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+
+        const incomeCategoryLabels = @json($incomeCategoryLabels);
+        const incomeCategoryTotals = @json($incomeCategoryTotals);
+        const incomeColors = incomeCategoryTotals.map((_, i) =>
+            `hsl(${(i * 360) / incomeCategoryTotals.length}, 70%, 50%)`
+        );
+
+        new Chart(document.getElementById('incomeCategoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: incomeCategoryLabels,
+                datasets: [{
+                    data: incomeCategoryTotals,
+                    backgroundColor: incomeColors.slice(0, incomeCategoryTotals.length)
                 }]
             },
             options: {

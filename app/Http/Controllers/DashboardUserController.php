@@ -77,8 +77,23 @@ class DashboardUserController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
+        $incomeCategory = DB::table('movements')
+            ->join('categories', 'movements.categoria_id', '=', 'categories.id')
+            ->selectRaw('categories.nombre as categoria, SUM(movements.monto) as total')
+            ->where('movements.user_id', $user->id)
+            ->where('movements.tipo', 'ingreso')
+            ->whereBetween('movements.fecha', [$startDateFilter, $endDateFilter])
+            ->groupBy('categories.nombre')
+            ->orderBy('total', 'desc')
+            ->get();
+
+
         $categoryLabels = $category->pluck('categoria');
         $categoryTotals = $category->pluck('total');
+
+        $incomeCategoryLabels = $incomeCategory->pluck('categoria');
+        $incomeCategoryTotals = $incomeCategory->pluck('total');
+
 
         return view('dashboard', [
             'ingresos' => $ingresos,
@@ -91,6 +106,8 @@ class DashboardUserController extends Controller
             'gastosData' => $gastosData,
             'categoryLabels' => $categoryLabels,
             'categoryTotals' => $categoryTotals,
+            'incomeCategoryLabels' => $incomeCategoryLabels,
+            'incomeCategoryTotals' => $incomeCategoryTotals,
         ]);
 
     }
