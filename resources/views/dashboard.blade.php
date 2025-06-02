@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>
-        <h2 class="fw-bold text-primary mb-4">¡Hola, {{ Auth::user()->name }}!</h2>
+    <div class="m-8">
+        <h2 class="fw-bold text-primary mb-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
         <form method="GET" class="mb-6 flex items-center space-x-2">
             <label for="start_date" class="text-sm">Desde:</label>
@@ -12,31 +12,26 @@
             <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filtrar</button>
         </form>
 
-        <p class="text-sm text-gray-600 mb-2">Datos del {{ $startDate }} al {{ $endDate }}</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <p class="text-sm text-gray-600 mb-2">Datos del {{ $startDate }} al {{ $endDate }} </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-3">
             <div class="card text-center shadow-sm border-0 p-4 bg-white">
-                <h6 class="text-muted">Total Ingresos</h6>
-                <h3 class="text-success fw-bold">${{ number_format($ingresos, 2, ',', '.') }}</h3>
-            </div>
-            <div class="card text-center shadow-sm border-0 p-4 bg-white">
-                <h6 class="text-muted">Total Gastos</h6>
-                <h3 class="text-danger fw-bold">${{ number_format($gastos, 2, ',', '.') }}</h3>
-            </div>
-            <div class="card text-center shadow-sm border-0 p-4 bg-white">
-                <h6 class="text-muted">Balance</h6>
-                <h3 class="text-primary fw-bold">${{ number_format($balance, 2, ',', '.') }}</h3>
+                <h6 class="text-muted">Balance: ${{ number_format($balance, 2, ',', '.') }}</h6>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="card text-center shadow-sm border-0 p-4 bg-white">
+                <canvas id="incomeCategoryChart" height="200"></canvas>
+            </div>
+            <div class="card text-center shadow-sm border-0 p-4 bg-white">
+                <canvas id="expenseCategoryChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             <div class="bg-white p-4 rounded shadow">
                 <canvas id="monthlyChart" height="200"></canvas>
-            </div>
-            <div class="bg-white p-4 rounded shadow">
-                <canvas id="categoryChart" height="200"></canvas>
-            </div>
-            <div class="bg-white p-4 rounded shadow">
-                <canvas id="incomeCategoryChart" height="200"></canvas>
             </div>
         </div>
 
@@ -82,7 +77,7 @@
         );
 
 
-        new Chart(document.getElementById('categoryChart'), {
+        new Chart(document.getElementById('expenseCategoryChart'), {
             type: 'doughnut',
             data: {
                 labels: categoryLabels,
@@ -97,6 +92,15 @@
                 plugins: {
                     legend: {
                         position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Gastos: ${{ number_format($gastos, 2, ',', '.') }}',
+                        align: 'start', // 'start' para esquina superior izquierda
+                        padding: {
+                            top: 0,
+                            left: 0
+                        }
                     }
                 }
             }
@@ -124,6 +128,15 @@
                 plugins: {
                     legend: {
                         position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Ingresos: ${{ number_format($ingresos, 2, ',', '.') }}',
+                        align: 'start', // 'start' para esquina superior izquierda
+                        padding: {
+                            top: 0,
+                            left: 0
+                        }
                     }
                 }
             }
