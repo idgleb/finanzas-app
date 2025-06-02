@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard de usuario
     Route::get('/dashboard', [DashboardUserController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/data', [DashboardUserController::class, 'data'])->name('dashboard.data');
 
     // Movimientos y categorías
     Route::resource('movements', MovementController::class);
