@@ -46,9 +46,16 @@
 
 
     <div class="p-8 mt-8 mb-8   bg-blue-100 rounded-lg shadow-lg">
-    <div class="bg-white rounded shadow">
-        <canvas id="monthlyChart" height="200"></canvas>
-    </div>
+        <form method="GET" class="mb-4 flex items-center justify-center space-x-2">
+            <label for="month_from" class="text-sm">Mes desde:</label>
+            <input type="month" id="month_from" name="month_from" value="{{ $monthFrom }}" class="border rounded p-1">
+            <label for="month_to" class="text-sm">Mes hasta:</label>
+            <input type="month" id="month_to" name="month_to" value="{{ $monthTo }}" class="border rounded p-1">
+            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filtrar</button>
+        </form>
+        <div class="bg-white rounded shadow">
+            <canvas id="monthlyChart" height="200"></canvas>
+        </div>
     </div>
 
 

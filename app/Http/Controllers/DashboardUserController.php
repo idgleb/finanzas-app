@@ -45,6 +45,19 @@ class DashboardUserController extends Controller
         $prevMonthLabel = Carbon::createFromFormat('Y-m-d', $prevMonthStart)->translatedFormat('F Y');
         $nextMonthLabel = Carbon::createFromFormat('Y-m-d', $nextMonthStart)->translatedFormat('F Y');
 
+        $monthFromParam = request('month_from');
+        $monthToParam = request('month_to');
+
+        if ($monthFromParam && $monthToParam) {
+            $monthStartDate = Carbon::createFromFormat('Y-m', $monthFromParam)->startOfMonth();
+            $monthEndDate = Carbon::createFromFormat('Y-m', $monthToParam)->endOfMonth();
+        } else {
+            $monthStartDate = Carbon::now()->subMonths(5)->startOfMonth();
+            $monthEndDate = Carbon::now()->endOfMonth();
+            $monthFromParam = $monthStartDate->format('Y-m');
+            $monthToParam = $monthEndDate->format('Y-m');
+        }
+
 
 
         $ingresos = Movement::where('user_id', $user->id)
@@ -58,14 +71,12 @@ class DashboardUserController extends Controller
 
         $balance = $ingresos - $gastos;
 
-        $startDate = Carbon::now()->subMonths(5)->startOfMonth();
-
         $monthly = DB::table('movements')
             ->selectRaw("DATE_FORMAT(fecha, '%Y-%m') as month, " .
                 "SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos, " .
                 "SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos")
             ->where('user_id', $user->id)
-            ->where('fecha', '>=', $startDate)
+            ->whereBetween('fecha', [$monthStartDate, $monthEndDate])
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -124,6 +135,8 @@ class DashboardUserController extends Controller
             'categoryTotals' => $categoryTotals,
             'incomeCategoryLabels' => $incomeCategoryLabels,
             'incomeCategoryTotals' => $incomeCategoryTotals,
+            'monthFrom' => $monthFromParam,
+            'monthTo' => $monthToParam,
         ]);
 
     }
