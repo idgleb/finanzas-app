@@ -4,7 +4,19 @@
     <div>
         <h2 class="fw-bold text-primary mb-4">¡Hola, {{ Auth::user()->name }}!</h2>
 
+        <form method="GET" class="mb-6 flex items-center space-x-2">
+            <label for="month" class="text-sm">Mes:</label>
+            <select id="month" name="month" class="border rounded p-1">
+                @foreach($availableMonths as $month)
+                    <option value="{{ $month }}" @selected($month == $selectedMonth)>
+                        {{ \Carbon\Carbon::createFromFormat('Y-m', $month)->format('F Y') }}
+                    </option>
+                @endforeach
+            </select>
+            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filtrar</button>
+        </form>
 
+        <p class="text-sm text-gray-600 mb-2">Datos para el mes {{ $selectedMonth }}</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div class="card text-center shadow-sm border-0 p-4 bg-white">
                 <h6 class="text-muted">Total Ingresos</h6>

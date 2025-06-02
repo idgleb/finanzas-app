@@ -22,11 +22,19 @@ class DashboardUserController extends Controller
     {
         $user = Auth::user();
 
+
+        $selectedMonth = request('month', Carbon::now()->format('Y-m'));
+        $startOfMonth = Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth();
+        $endOfMonth = Carbon::createFromFormat('Y-m', $selectedMonth)->endOfMonth();
+
+
         $ingresos = Movement::where('user_id', $user->id)
             ->where('tipo', 'ingreso')
+            ->whereBetween('fecha', [$startOfMonth, $endOfMonth])
             ->sum('monto');
         $gastos = Movement::where('user_id', $user->id)
             ->where('tipo', 'gasto')
+            ->whereBetween('fecha', [$startOfMonth, $endOfMonth])
             ->sum('monto');
 
         $balance = $ingresos - $gastos;
@@ -43,6 +51,13 @@ class DashboardUserController extends Controller
             ->orderBy('month')
             ->get();
 
+        $availableMonths = Movement::where('user_id', $user->id)
+            ->selectRaw("DATE_FORMAT(fecha, '%Y-%m') as ym")
+            ->groupBy('ym')
+            ->orderBy('ym', 'desc')
+            ->pluck('ym');
+
+
         $monthlyLabels = $monthly->pluck('month')->map(function ($m) {
             return Carbon::createFromFormat('Y-m', $m)->format('M y');
         });
@@ -54,6 +69,7 @@ class DashboardUserController extends Controller
             ->selectRaw('categories.nombre as categoria, SUM(movements.monto) as total')
             ->where('movements.user_id', $user->id)
             ->where('movements.tipo', 'gasto')
+            ->whereBetween('movements.fecha', [$startOfMonth, $endOfMonth])
             ->groupBy('categories.nombre')
             ->orderBy('total', 'desc')
             ->get();
@@ -65,6 +81,8 @@ class DashboardUserController extends Controller
             'ingresos' => $ingresos,
             'gastos' => $gastos,
             'balance' => $balance,
+            'selectedMonth' => $selectedMonth,
+            'availableMonths' => $availableMonths,
             'monthlyLabels' => $monthlyLabels,
             'ingresosData' => $ingresosData,
             'gastosData' => $gastosData,
