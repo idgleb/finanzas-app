@@ -46,14 +46,13 @@
 
 
     <div class="p-8 mt-8 mb-8   bg-blue-100 rounded-lg shadow-lg">
-
     <div class="bg-white rounded shadow">
         <canvas id="monthlyChart" height="200"></canvas>
     </div>
     </div>
 
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const monthlyLabels = @json($monthlyLabels);
