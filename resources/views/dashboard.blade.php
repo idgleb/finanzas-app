@@ -14,6 +14,17 @@
 
         <p class="text-sm text-gray-600 mb-2">Datos del {{ $startDate }} al {{ $endDate }} </p>
 
+        <div class="flex justify-between mb-4">
+            <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
+               class="btn-outline-finanzas">
+                &laquo; Mes anterior
+            </a>
+            <a href="{{ route('dashboard', ['start_date' => $nextMonthStart, 'end_date' => $nextMonthEnd]) }}"
+               class="btn-outline-finanzas">
+                Mes siguiente &raquo;
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-3">
             <div class="card text-center shadow-sm border-0 p-4 bg-white">
                 <h6 class="text-muted">Balance: ${{ number_format($balance, 2, ',', '.') }}</h6>

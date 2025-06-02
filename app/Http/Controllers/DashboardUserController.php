@@ -36,6 +36,11 @@ class DashboardUserController extends Controller
             $selectedEnd = $endDateFilter->toDateString();
         }
 
+        $prevMonthStart = $startDateFilter->copy()->subMonth()->startOfMonth()->toDateString();
+        $prevMonthEnd = $startDateFilter->copy()->subMonth()->endOfMonth()->toDateString();
+        $nextMonthStart = $startDateFilter->copy()->addMonth()->startOfMonth()->toDateString();
+        $nextMonthEnd = $startDateFilter->copy()->addMonth()->endOfMonth()->toDateString();
+
 
         $ingresos = Movement::where('user_id', $user->id)
             ->where('tipo', 'ingreso')
@@ -101,6 +106,10 @@ class DashboardUserController extends Controller
             'balance' => $balance,
             'startDate' => $selectedStart,
             'endDate' => $selectedEnd,
+            'prevMonthStart' => $prevMonthStart,
+            'prevMonthEnd' => $prevMonthEnd,
+            'nextMonthStart' => $nextMonthStart,
+            'nextMonthEnd' => $nextMonthEnd,
             'monthlyLabels' => $monthlyLabels,
             'ingresosData' => $ingresosData,
             'gastosData' => $gastosData,
