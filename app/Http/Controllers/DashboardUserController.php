@@ -41,6 +41,11 @@ class DashboardUserController extends Controller
         $nextMonthStart = $startDateFilter->copy()->addMonth()->startOfMonth()->toDateString();
         $nextMonthEnd = $startDateFilter->copy()->addMonth()->endOfMonth()->toDateString();
 
+        Carbon::setLocale('es');
+        $prevMonthLabel = Carbon::createFromFormat('Y-m-d', $prevMonthStart)->translatedFormat('F Y');
+        $nextMonthLabel = Carbon::createFromFormat('Y-m-d', $nextMonthStart)->translatedFormat('F Y');
+
+
 
         $ingresos = Movement::where('user_id', $user->id)
             ->where('tipo', 'ingreso')
@@ -108,8 +113,10 @@ class DashboardUserController extends Controller
             'endDate' => $selectedEnd,
             'prevMonthStart' => $prevMonthStart,
             'prevMonthEnd' => $prevMonthEnd,
+            'prevMonthLabel' => $prevMonthLabel,
             'nextMonthStart' => $nextMonthStart,
             'nextMonthEnd' => $nextMonthEnd,
+            'nextMonthLabel' => $nextMonthLabel,
             'monthlyLabels' => $monthlyLabels,
             'ingresosData' => $ingresosData,
             'gastosData' => $gastosData,

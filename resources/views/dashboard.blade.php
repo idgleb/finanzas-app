@@ -4,7 +4,18 @@
     <div class="m-8">
         <h2 class="fw-bold text-primary mb-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
-        <form method="GET" class="mb-6 flex items-center space-x-2">
+        <div class="flex justify-between mb-4">
+            <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
+               class="btn-outline-finanzas">
+                &laquo; {{ $prevMonthLabel }}
+            </a>
+            <a href="{{ route('dashboard', ['start_date' => $nextMonthStart, 'end_date' => $nextMonthEnd]) }}"
+               class="btn-outline-finanzas">
+                {{ $nextMonthLabel }} &raquo;
+            </a>
+        </div>
+
+        <form method="GET" class="m-6 flex items-center space-x-2 justify-center">
             <label for="start_date" class="text-sm">Desde:</label>
             <input type="date" id="start_date" name="start_date" value="{{ $startDate }}" class="border rounded p-1">
             <label for="end_date" class="text-sm">Hasta:</label>
@@ -14,16 +25,7 @@
 
         <p class="text-sm text-gray-600 mb-2">Datos del {{ $startDate }} al {{ $endDate }} </p>
 
-        <div class="flex justify-between mb-4">
-            <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
-               class="btn-outline-finanzas">
-                &laquo; Mes anterior
-            </a>
-            <a href="{{ route('dashboard', ['start_date' => $nextMonthStart, 'end_date' => $nextMonthEnd]) }}"
-               class="btn-outline-finanzas">
-                Mes siguiente &raquo;
-            </a>
-        </div>
+
 
         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-3">
             <div class="card text-center shadow-sm border-0 p-4 bg-white">
