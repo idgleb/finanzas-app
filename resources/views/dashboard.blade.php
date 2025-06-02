@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="m-8">
-        <h2 class="fw-bold text-primary mb-8">¡Hola, {{ Auth::user()->name }}!</h2>
+
+    <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
+
+    <div class="p-8 bg-blue-100 rounded-lg shadow-lg">
 
         <div class="flex justify-between mb-4">
             <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
@@ -25,31 +27,33 @@
 
         <p class="text-sm text-gray-600 mb-2">Datos del {{ $startDate }} al {{ $endDate }} </p>
 
-
-
-        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-3">
-            <div class="card text-center shadow-sm border-0 p-4 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-3 ">
+            <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
                 <h6 class="text-muted">Balance: ${{ number_format($balance, 2, ',', '.') }}</h6>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div class="card text-center shadow-sm border-0 p-4 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
                 <canvas id="incomeCategoryChart" height="200"></canvas>
             </div>
-            <div class="card text-center shadow-sm border-0 p-4 bg-white">
+            <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
                 <canvas id="expenseCategoryChart" height="200"></canvas>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
-            <div class="bg-white p-4 rounded shadow">
-                <canvas id="monthlyChart" height="200"></canvas>
-            </div>
-        </div>
-
     </div>
 
+
+
+    <div class="p-8 mt-8 mb-8   bg-blue-100 rounded-lg shadow-lg">
+
+    <div class="bg-white rounded shadow">
+        <canvas id="monthlyChart" height="200"></canvas>
+    </div>
+    </div>
+
+
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const monthlyLabels = @json($monthlyLabels);
@@ -109,7 +113,7 @@
                     title: {
                         display: true,
                         text: 'Gastos: ${{ number_format($gastos, 2, ',', '.') }}',
-                        align: 'start', // 'start' para esquina superior izquierda
+                        align: 'start',
                         padding: {
                             top: 0,
                             left: 0
@@ -155,6 +159,5 @@
             }
         });
     </script>
-
 
 @endsection
