@@ -23,18 +23,27 @@ class DashboardUserController extends Controller
         $user = Auth::user();
 
 
-        $selectedMonth = request('month', Carbon::now()->format('Y-m'));
-        $startOfMonth = Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth();
-        $endOfMonth = Carbon::createFromFormat('Y-m', $selectedMonth)->endOfMonth();
+        $selectedStart = request('start_date');
+        $selectedEnd = request('end_date');
+
+        if ($selectedStart && $selectedEnd) {
+            $startDateFilter = Carbon::createFromFormat('Y-m-d', $selectedStart)->startOfDay();
+            $endDateFilter = Carbon::createFromFormat('Y-m-d', $selectedEnd)->endOfDay();
+        } else {
+            $startDateFilter = Carbon::now()->startOfMonth();
+            $endDateFilter = Carbon::now()->endOfMonth();
+            $selectedStart = $startDateFilter->toDateString();
+            $selectedEnd = $endDateFilter->toDateString();
+        }
 
 
         $ingresos = Movement::where('user_id', $user->id)
             ->where('tipo', 'ingreso')
-            ->whereBetween('fecha', [$startOfMonth, $endOfMonth])
+            ->whereBetween('fecha', [$startDateFilter, $endDateFilter])
             ->sum('monto');
         $gastos = Movement::where('user_id', $user->id)
             ->where('tipo', 'gasto')
-            ->whereBetween('fecha', [$startOfMonth, $endOfMonth])
+            ->whereBetween('fecha', [$startDateFilter, $endDateFilter])
             ->sum('monto');
 
         $balance = $ingresos - $gastos;
@@ -51,12 +60,6 @@ class DashboardUserController extends Controller
             ->orderBy('month')
             ->get();
 
-        $availableMonths = Movement::where('user_id', $user->id)
-            ->selectRaw("DATE_FORMAT(fecha, '%Y-%m') as ym")
-            ->groupBy('ym')
-            ->orderBy('ym', 'desc')
-            ->pluck('ym');
-
 
         $monthlyLabels = $monthly->pluck('month')->map(function ($m) {
             return Carbon::createFromFormat('Y-m', $m)->format('M y');
@@ -69,7 +72,7 @@ class DashboardUserController extends Controller
             ->selectRaw('categories.nombre as categoria, SUM(movements.monto) as total')
             ->where('movements.user_id', $user->id)
             ->where('movements.tipo', 'gasto')
-            ->whereBetween('movements.fecha', [$startOfMonth, $endOfMonth])
+            ->whereBetween('movements.fecha', [$startDateFilter, $endDateFilter])
             ->groupBy('categories.nombre')
             ->orderBy('total', 'desc')
             ->get();
@@ -81,8 +84,8 @@ class DashboardUserController extends Controller
             'ingresos' => $ingresos,
             'gastos' => $gastos,
             'balance' => $balance,
-            'selectedMonth' => $selectedMonth,
-            'availableMonths' => $availableMonths,
+            'startDate' => $selectedStart,
+            'endDate' => $selectedEnd,
             'monthlyLabels' => $monthlyLabels,
             'ingresosData' => $ingresosData,
             'gastosData' => $gastosData,
