@@ -6,6 +6,9 @@
 
 **Finanzas App** es una aplicación web Laravel que permite gestionar ingresos, gastos y categorías personalizadas. Los usuarios PRO desbloquean funciones avanzadas pagando con tarjeta a través de Mercado Pago, con un webhook para confirmar pagos. Incluye un panel admin para estadísticas. Usa ngrok para exponer la app localmente con HTTPS, compatible con Mercado Pago.
 
+![Captura de pantalla 2025-06-02 163857](https://github.com/user-attachments/assets/1aef0c5e-0654-46e1-9031-536a2bb1678c)
+
+
 ---
 
 ## 🚀 Características
