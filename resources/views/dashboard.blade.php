@@ -176,7 +176,8 @@
                             legend: {display: false},
                             htmlLegend: {containerID: 'expenseCategoryLegend'},
                             centerText: {
-                                text: `Gastos\n\n$${formatCurrency(data.gastos)}`
+                                text: `Gastos\n\n$${formatCurrency(data.gastos)}`,
+                                color: '#dc2626'
                             }
                         }
                     },
@@ -206,7 +207,8 @@
                             legend: {display: false},
                             htmlLegend: {containerID: 'incomeCategoryLegend'},
                             centerText: {
-                                text: `Ingresos\n\n$${formatCurrency(data.ingresos)}`
+                                text: `Ingresos\n\n$${formatCurrency(data.ingresos)}`,
+                                color: '#007c2d'
                             }
                         }
                     },
