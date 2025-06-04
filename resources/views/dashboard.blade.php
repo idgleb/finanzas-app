@@ -40,7 +40,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="incomeCategoryChart" class="bg-amber-200 w-full h-60 md:h-44 lg:h-44 p-1"></canvas>
+                <canvas id="incomeCategoryChart" class="w-full h-60 md:h-44 lg:h-44 p-1"></canvas>
                 <div id="incomeCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
             <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
@@ -128,7 +128,13 @@
                 ctx.fillStyle = options.color || '#111';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(options.text, width / 2, height / 2);
+                const lines = options.text.split('\n');
+                const lineHeight = options.lineHeight || 16;
+                lines.forEach((line, index) => {
+                    const y = height / 2 + (index - (lines.length - 1) / 2) * lineHeight;
+                    ctx.fillText(line, width / 2, y);
+                });
+
                 ctx.restore();
             }
         };
@@ -170,7 +176,7 @@
                             legend: {display: false},
                             htmlLegend: {containerID: 'expenseCategoryLegend'},
                             centerText: {
-                                text: `Gastos $${formatCurrency(data.gastos)}`
+                                text: `Gastos\n\n$${formatCurrency(data.gastos)}`
                             }
                         }
                     },
@@ -200,7 +206,7 @@
                             legend: {display: false},
                             htmlLegend: {containerID: 'incomeCategoryLegend'},
                             centerText: {
-                                text: `Ingresos: $${formatCurrency(data.ingresos)}`
+                                text: `Ingresos\n\n$${formatCurrency(data.ingresos)}`
                             }
                         }
                     },
