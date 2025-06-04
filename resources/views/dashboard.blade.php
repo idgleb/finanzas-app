@@ -4,7 +4,7 @@
 
     <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
-    <div class="p-8 bg-blue-100 rounded-lg shadow-lg">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
 
         <div class="flex justify-between mb-4">
             <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
@@ -21,7 +21,8 @@
             </a>
         </div>
 
-        <form method="GET" id="dateFilterForm" class="m-6 flex items-center space-x-2 justify-center">
+        <form method="GET" id="dateFilterForm"
+              class="m-6 flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-2">
             <label for="start_date" class="text-sm">Desde:</label>
             <input type="date" id="start_date" name="start_date" value="{{ $startDate }}" class="border rounded p-1">
             <label for="end_date" class="text-sm">Hasta:</label>
@@ -39,18 +40,19 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="incomeCategoryChart" height="200"></canvas>
+                <canvas id="incomeCategoryChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
             </div>
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" height="200"></canvas>
+                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
             </div>
         </div>
     </div>
 
 
 
-    <div class="p-8 mt-8 mb-8   bg-blue-100 rounded-lg shadow-lg">
-        <form method="GET" id="monthFilterForm" class="mb-4 flex items-center justify-center space-x-2">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 mt-8 mb-8 bg-blue-100 rounded-lg shadow-lg">
+        <form method="GET" id="monthFilterForm"
+              class="mb-4 flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-2">
             <label for="month_from" class="text-sm">Mes desde:</label>
             <input type="month" id="month_from" name="month_from" value="{{ $monthFrom }}" class="border rounded p-1">
             <label for="month_to" class="text-sm">Mes hasta:</label>
@@ -58,7 +60,7 @@
             <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filtrar</button>
         </form>
         <div class="bg-white rounded shadow">
-            <canvas id="monthlyChart" height="200"></canvas>
+            <canvas id="monthlyChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
         </div>
     </div>
 
