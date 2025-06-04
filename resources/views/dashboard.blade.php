@@ -84,7 +84,9 @@
                 expenseChart = new Chart(ctxExpense, {
                     type: 'doughnut',
                     data: {
-                        labels: data.categoryLabels,
+                        labels: data.categoryLabels.map((label, i) =>
+                            `${label}: $${formatCurrency(data.categoryTotals[i])}`
+                        ),
                         datasets: [{
                             data: data.categoryTotals,
                             backgroundColor: data.categoryTotals.map((_, i) =>
@@ -97,7 +99,12 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {position: 'bottom'},
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 10,
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: `Gastos: $${formatCurrency(data.gastos)}`,
@@ -112,7 +119,9 @@
                 incomeChart = new Chart(ctxIncome, {
                     type: 'doughnut',
                     data: {
-                        labels: data.incomeCategoryLabels,
+                        labels: data.incomeCategoryLabels.map((label, i) =>
+                            `${label}: $${formatCurrency(data.incomeCategoryTotals[i])}`
+                        ),
                         datasets: [{
                             data: data.incomeCategoryTotals,
                             backgroundColor: data.incomeCategoryTotals.map((_, i) =>
@@ -124,7 +133,12 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {position: 'bottom'},
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 10,
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: `Ingresos: $${formatCurrency(data.ingresos)}`,
