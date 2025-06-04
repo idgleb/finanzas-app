@@ -40,10 +40,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="incomeCategoryChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
+                <canvas id="incomeCategoryChart" class="w-full h-full"></canvas>
             </div>
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
+                <canvas id="expenseCategoryChart" class="w-full h-100"></canvas>
             </div>
         </div>
     </div>
@@ -96,8 +96,9 @@
 
                     },
                     options: {
-                        responsive: true,
+                        responsive: false,
                         maintainAspectRatio: false,
+                        cutout: '70%',
                         plugins: {
                             legend: {
                                 position: 'bottom',
@@ -130,8 +131,9 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        responsive: false,
                         maintainAspectRatio: false,
+                        cutout: '70%',
                         plugins: {
                             legend: {
                                 position: 'bottom',
