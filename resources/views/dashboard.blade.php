@@ -44,7 +44,7 @@
                 <div id="incomeCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
             <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-44 lg:h-44p-1"></canvas>
+                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-44 lg:h-44 p-1"></canvas>
                 <div id="expenseCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
         </div>
@@ -149,7 +149,6 @@
             function formatCurrency(value) {
                 return Number(value).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             }
-
 
             function renderCharts(data) {
                 if (expenseChart) expenseChart.destroy();
@@ -258,6 +257,7 @@
                 }
             }
 
+            fetchDashboardData()
 
             async function fetchDashboardData() {
                 const params = {
@@ -314,8 +314,11 @@
                 nextMonthEnd: '{{ $nextMonthEnd }}',
                 nextMonthLabel: '{{ $nextMonthLabel }}'
             };
+
+           // Render charts and update info with initial data
             renderCharts(initialData);
             updateInfo(initialData);
+
         });
 
     </script>
