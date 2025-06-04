@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    
+
     <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
     <div class="container  mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
@@ -43,7 +43,8 @@
                 <canvas id="incomeCategoryChart" class="w-full h-full p-1"></canvas>
             </div>
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" class="w-full h-full p-1"></canvas>
+                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-72 lg:h-80 p-1"></canvas>
+                <div id="expenseCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
         </div>
     </div>
@@ -68,6 +69,51 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+
+        const getOrCreateLegendList = (chart, id) => {
+            const legendContainer = document.getElementById(id);
+            let listContainer = legendContainer.querySelector('ul');
+            if (!listContainer) {
+                listContainer = document.createElement('ul');
+                listContainer.className = 'flex flex-wrap justify-center gap-2 text-sm p-0 m-0 list-none';
+                legendContainer.appendChild(listContainer);
+            }
+            return listContainer;
+        };
+
+        const htmlLegendPlugin = {
+            id: 'htmlLegend',
+            afterUpdate(chart, args, options) {
+                const ul = getOrCreateLegendList(chart, options.containerID);
+                while (ul.firstChild) {
+                    ul.firstChild.remove();
+                }
+
+                const items = chart.options.plugins.legend.labels.generateLabels(chart);
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center cursor-pointer';
+                    li.onclick = () => {
+                        chart.toggleDataVisibility(item.index);
+                        chart.update();
+                    };
+
+                    const box = document.createElement('span');
+                    box.className = 'w-3 h-3 mr-1 inline-block';
+                    box.style.background = item.fillStyle;
+                    box.style.borderColor = item.strokeStyle;
+                    box.style.borderWidth = item.lineWidth + 'px';
+
+                    const text = document.createElement('span');
+                    text.textContent = item.text;
+
+                    li.appendChild(box);
+                    li.appendChild(text);
+                    ul.appendChild(li);
+                });
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             const ctxMonthly = document.getElementById('monthlyChart');
             const ctxExpense = document.getElementById('expenseCategoryChart');
@@ -96,17 +142,13 @@
 
                     },
                     options: {
-                        responsive: true,
+                        responsive: false,
                         maintainAspectRatio: false,
                         radius: '100%',
                         cutout: '70%',
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 10,
-                                }
-                            },
+                            legend: {display: false},
+                            htmlLegend: {containerID: 'expenseCategoryLegend'},
                             title: {
                                 display: true,
                                 text: `Gastos: $${formatCurrency(data.gastos)}`,
@@ -114,7 +156,8 @@
                                 padding: {top: 0, left: 0}
                             }
                         }
-                    }
+                    },
+                    plugins: [htmlLegendPlugin]
                 });
 
                 if (incomeChart) incomeChart.destroy();
