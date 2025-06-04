@@ -80,7 +80,7 @@
             function renderCharts(data) {
                 if (monthlyChart) monthlyChart.destroy();
                 monthlyChart = new Chart(ctxMonthly, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
                         labels: data.monthlyLabels,
                         datasets: [
