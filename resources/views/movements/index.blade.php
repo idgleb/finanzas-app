@@ -14,7 +14,7 @@
 
         <!-- Tabla de movimientos -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded shadow">
+            <table class="min-w-full bg-white rounded shadow text-xs sm:text-sm md:text-base">
                 <thead>
                 <tr>
                     <th class="p-2 text-left">Fecha</th>
