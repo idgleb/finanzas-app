@@ -39,11 +39,12 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="incomeCategoryChart" class="w-full h-full p-1"></canvas>
+            <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
+                <canvas id="incomeCategoryChart" class="bg-amber-200 w-full h-60 md:h-44 lg:h-44 p-1"></canvas>
+                <div id="incomeCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
-            <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-72 lg:h-80 p-1"></canvas>
+            <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
+                <canvas id="expenseCategoryChart" class="w-full h-60 md:h-44 lg:h-44p-1"></canvas>
                 <div id="expenseCategoryLegend" class="mt-2 flex flex-wrap justify-center"></div>
             </div>
         </div>
@@ -114,6 +115,7 @@
             }
         };
 
+
         document.addEventListener('DOMContentLoaded', () => {
             const ctxMonthly = document.getElementById('monthlyChart');
             const ctxExpense = document.getElementById('expenseCategoryChart');
@@ -175,17 +177,13 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        responsive: false,
                         maintainAspectRatio: false,
                         radius: '100%',
                         cutout: '70%',
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 10,
-                                }
-                            },
+                            legend: {display: false},
+                            htmlLegend: {containerID: 'incomeCategoryLegend'},
                             title: {
                                 display: true,
                                 text: `Ingresos: $${formatCurrency(data.ingresos)}`,
@@ -193,7 +191,8 @@
                                 padding: {top: 0, left: 0}
                             }
                         }
-                    }
+                    },
+                    plugins: [htmlLegendPlugin]
                 });
 
                 if (monthlyChart) monthlyChart.destroy();
