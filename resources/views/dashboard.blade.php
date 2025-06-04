@@ -292,7 +292,30 @@
                 });
             });
 
-            fetchDashboardData()
+            const initialData = {
+                monthlyLabels: @json($monthlyLabels),
+                ingresosData: @json($ingresosData),
+                gastosData: @json($gastosData),
+                categoryLabels: @json($categoryLabels),
+                categoryTotals: @json($categoryTotals),
+                incomeCategoryLabels: @json($incomeCategoryLabels),
+                incomeCategoryTotals: @json($incomeCategoryTotals),
+                gastos: {{ $gastos }},
+                ingresos: {{ $ingresos }},
+                balance: {{ $balance }},
+                startDate: '{{ $startDate }}',
+                endDate: '{{ $endDate }}',
+                prevMonthStart: '{{ $prevMonthStart }}',
+                prevMonthEnd: '{{ $prevMonthEnd }}',
+                prevMonthLabel: '{{ $prevMonthLabel }}',
+                nextMonthStart: '{{ $nextMonthStart }}',
+                nextMonthEnd: '{{ $nextMonthEnd }}',
+                nextMonthLabel: '{{ $nextMonthLabel }}'
+            };
+
+           // Render charts and update info with initial data
+            renderCharts(initialData);
+            updateInfo(initialData);
 
             fetchDashboardData()
 
