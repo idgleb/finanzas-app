@@ -4,7 +4,7 @@
 
     <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
-    <div class="w-full mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
+    <div class="container  mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
 
         <div class="flex justify-between mb-4">
             <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
@@ -61,7 +61,7 @@
             <input type="month" id="month_to" name="month_to" value="{{ $monthTo }}" class="border rounded p-1">
             <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filtrar</button>
         </form>
-        <div class="bg-white rounded shadow">
+        <div class="card text-center justify-items-center shadow-sm border-0 p-4 bg-white rounded-lg">
             <canvas id="monthlyChart" class="w-full h-60 md:h-72 lg:h-80"></canvas>
         </div>
     </div>
@@ -93,7 +93,7 @@
                 const items = chart.options.plugins.legend.labels.generateLabels(chart);
                 items.forEach(item => {
                     const li = document.createElement('li');
-                    li.className = 'flex items-center cursor-pointer';
+                    li.className = 'px-2 flex items-center cursor-pointer';
                     li.onclick = () => {
                         chart.toggleDataVisibility(item.index);
                         chart.update();
@@ -331,6 +331,7 @@
             };
 
            // Render charts and update info with initial data
+            renderDateCharts(initialData);
             renderDateCharts(initialData);
             renderMonthChart(initialData)
             updateInfo(initialData);
