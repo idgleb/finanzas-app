@@ -14,42 +14,47 @@
 
         <!-- Tabla de movimientos -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded shadow text-xs sm:text-sm md:text-base">
-                <thead>
+            <table
+                class="min-w-full divide-y divide-gray-200 bg-white rounded-lg shadow text-xs sm:text-sm md:text-base">
+                <thead class="bg-gray-50">
                 <tr>
-                    <th class="p-2 text-left">Fecha</th>
-                    <th class="p-2 text-left">Tipo</th>
-                    <th class="p-2 text-left">Categoría</th>
-                    <th class="p-2 text-right">Monto</th>
-                    <th class="p-2 text-right">Acciones</th>
+                    <th class="p-3 text-left">Fecha</th>
+                    <th class="p-3 text-left">Tipo</th>
+                    <th class="p-3 text-left">Categoría</th>
+                    <th class="p-3 text-right">Monto</th>
+                    <th class="p-3 text-right">Acciones</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                 @foreach($movements as $movement)
-                    <tr>
+                    <tr class="hover:bg-gray-50">
                         {{-- Aquí tu trait convierte el UTC a la zona de usuario --}}
 
-                        <td class="p-2">{{ $movement->fecha_local }}</td>
+                        <td class="p-3">{{ $movement->fecha_local }}</td>
 
-                        <td class="p-2">{{ ucfirst($movement->tipo) }}</td>
-                        <td class="p-2">
+                        <td class="p-3">{{ ucfirst($movement->tipo) }}</td>
+                        <td class="p-3">
                             {!! $movement->category->icono ?? '' !!}
                             {{ $movement->category->nombre ?? 'Sin categoría' }}
                         </td>
-                        <td class="p-2 text-right">
+                        <td class="p-3 text-right">
                             ${{ number_format($movement->monto, 2) }}
                         </td>
                         <td class="p-2 text-right space-x-2">
                             <a href="{{ route('movements.edit', $movement) }}"
-                               class="text-blue-600 hover:underline">Editar</a>
+                               class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                <i class="bi bi-pencil-square me-1"></i>
+                                <span class="hidden sm:inline">Editar</span>
+                            </a>
                             <form action="{{ route('movements.destroy', $movement) }}"
                                   method="POST"
                                   class="inline"
                                   onsubmit="return confirm('¿Eliminar?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">
-                                    Eliminar
+                                <button type="submit" class="inline-flex items-center text-red-600 hover:text-red-800">
+                                    <i class="bi bi-trash me-1"></i>
+                                    <span class="hidden sm:inline">Eliminar</span>
                                 </button>
                             </form>
                         </td>

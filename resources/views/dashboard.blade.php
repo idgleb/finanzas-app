@@ -80,6 +80,61 @@
 
 
             function renderCharts(data) {
+                if (expenseChart) expenseChart.destroy();
+                expenseChart = new Chart(ctxExpense, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.categoryLabels,
+                        datasets: [{
+                            data: data.categoryTotals,
+                            backgroundColor: data.categoryTotals.map((_, i) =>
+                                `hsl(${(i * 360) / data.categoryTotals.length}, 70%, 50%)`
+                            )
+                        }]
+
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {position: 'bottom'},
+                            title: {
+                                display: true,
+                                text: `Gastos: $${formatCurrency(data.gastos)}`,
+                                align: 'start',
+                                padding: {top: 0, left: 0}
+                            }
+                        }
+                    }
+                });
+
+                if (incomeChart) incomeChart.destroy();
+                incomeChart = new Chart(ctxIncome, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.incomeCategoryLabels,
+                        datasets: [{
+                            data: data.incomeCategoryTotals,
+                            backgroundColor: data.incomeCategoryTotals.map((_, i) =>
+                                `hsl(${(i * 360) / data.incomeCategoryTotals.length}, 70%, 50%)`
+                            )
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {position: 'bottom'},
+                            title: {
+                                display: true,
+                                text: `Ingresos: $${formatCurrency(data.ingresos)}`,
+                                align: 'start',
+                                padding: {top: 0, left: 0}
+                            }
+                        }
+                    }
+                });
+
                 if (monthlyChart) monthlyChart.destroy();
                 monthlyChart = new Chart(ctxMonthly, {
                     type: 'bar',
@@ -105,70 +160,6 @@
                     options: {responsive: true, maintainAspectRatio: false}
                 });
 
-                if (expenseChart) expenseChart.destroy();
-                expenseChart = new Chart(ctxExpense, {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.categoryLabels,
-                        datasets: [{
-                            data: data.categoryTotals,
-                            backgroundColor: data.categoryTotals.map((_, i) =>
-                                `hsl(${(i * 360) / data.categoryTotals.length}, 70%, 50%)`
-                            )
-                        }]
-
-                    },
-
-
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {position: 'bottom'},
-                            title: {
-                                display: true,
-                                text: `Gastos: $${formatCurrency(data.gastos)}`,
-                                align: 'start',
-                                padding: {top: 0, left: 0}
-                            }
-
-
-                        }
-                    }
-
-
-                });
-
-                if (incomeChart) incomeChart.destroy();
-                incomeChart = new Chart(ctxIncome, {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.incomeCategoryLabels,
-                        datasets: [{
-                            data: data.incomeCategoryTotals,
-                            backgroundColor: data.incomeCategoryTotals.map((_, i) =>
-                                `hsl(${(i * 360) / data.incomeCategoryTotals.length}, 70%, 50%)`
-                            )
-                        }]
-                    },
-
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {position: 'bottom'},
-                            title: {
-                                display: true,
-                                text: `Ingresos: $${formatCurrency(data.ingresos)}`,
-                                align: 'start',
-                                padding: {top: 0, left: 0}
-                            }
-
-
-                        }
-                    }
-
-                });
             }
 
             function updateInfo(data) {
