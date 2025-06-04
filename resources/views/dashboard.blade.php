@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-
+    
     <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
+    <div class="container  mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
 
         <div class="flex justify-between mb-4">
             <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
@@ -40,10 +40,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="incomeCategoryChart" class="w-full h-full"></canvas>
+                <canvas id="incomeCategoryChart" class="w-full h-full p-1"></canvas>
             </div>
             <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-lg">
-                <canvas id="expenseCategoryChart" class="w-full h-100"></canvas>
+                <canvas id="expenseCategoryChart" class="w-full h-full p-1"></canvas>
             </div>
         </div>
     </div>
@@ -96,8 +96,9 @@
 
                     },
                     options: {
-                        responsive: false,
+                        responsive: true,
                         maintainAspectRatio: false,
+                        radius: '100%',
                         cutout: '70%',
                         plugins: {
                             legend: {
@@ -131,8 +132,9 @@
                         }]
                     },
                     options: {
-                        responsive: false,
+                        responsive: true,
                         maintainAspectRatio: false,
+                        radius: '100%',
                         cutout: '70%',
                         plugins: {
                             legend: {
