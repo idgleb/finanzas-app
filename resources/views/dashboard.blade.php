@@ -4,7 +4,7 @@
 
     <h2 class="fw-bold text-primary m-8">¡Hola, {{ Auth::user()->name }}!</h2>
 
-    <div class="container  mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
+    <div class="w-full mx-auto p-4 sm:p-6 md:p-8 bg-blue-100 rounded-lg shadow-lg">
 
         <div class="flex justify-between mb-4">
             <a href="{{ route('dashboard', ['start_date' => $prevMonthStart, 'end_date' => $prevMonthEnd]) }}"
