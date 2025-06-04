@@ -115,6 +115,24 @@
             }
         };
 
+        const centerTextPlugin = {
+            id: 'centerText',
+            beforeDraw(chart, args, options) {
+                const {ctx, chartArea} = chart;
+                if (!chartArea) {
+                    return;
+                }
+                const {width, height} = chartArea;
+                ctx.save();
+                ctx.font = options.font || 'bold 16px sans-serif';
+                ctx.fillStyle = options.color || '#111';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(options.text, width / 2, height / 2);
+                ctx.restore();
+            }
+        };
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const ctxMonthly = document.getElementById('monthlyChart');
@@ -151,15 +169,12 @@
                         plugins: {
                             legend: {display: false},
                             htmlLegend: {containerID: 'expenseCategoryLegend'},
-                            title: {
-                                display: true,
-                                text: `Gastos: $${formatCurrency(data.gastos)}`,
-                                align: 'start',
-                                padding: {top: 0, left: 0}
+                            centerText: {
+                                text: `Gastos $${formatCurrency(data.gastos)}`
                             }
                         }
                     },
-                    plugins: [htmlLegendPlugin]
+                    plugins: [htmlLegendPlugin, centerTextPlugin]
                 });
 
                 if (incomeChart) incomeChart.destroy();
@@ -184,15 +199,12 @@
                         plugins: {
                             legend: {display: false},
                             htmlLegend: {containerID: 'incomeCategoryLegend'},
-                            title: {
-                                display: true,
-                                text: `Ingresos: $${formatCurrency(data.ingresos)}`,
-                                align: 'start',
-                                padding: {top: 0, left: 0}
+                            centerText: {
+                                text: `Ingresos: $${formatCurrency(data.ingresos)}`
                             }
                         }
                     },
-                    plugins: [htmlLegendPlugin]
+                    plugins: [htmlLegendPlugin, centerTextPlugin]
                 });
 
                 if (monthlyChart) monthlyChart.destroy();
