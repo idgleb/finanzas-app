@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('tipo', ['ingreso', 'gasto']);
-            $table->decimal('monto', 10, 2);
+            $table->decimal('monto', 11, 2);
             $table->foreignId('categoria_id')->constrained('categories');
             $table->timestamp('fecha');
             $table->timestamps();
