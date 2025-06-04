@@ -150,7 +150,37 @@
                 return Number(value).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             }
 
-            function renderCharts(data) {
+            function renderDateCharts(data) {
+                if (incomeChart) incomeChart.destroy();
+                incomeChart = new Chart(ctxIncome, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.incomeCategoryLabels.map((label, i) =>
+                            `${label}: $${formatCurrency(data.incomeCategoryTotals[i])}`
+                        ),
+                        datasets: [{
+                            data: data.incomeCategoryTotals,
+                            backgroundColor: data.incomeCategoryTotals.map((_, i) =>
+                                `hsl(${(i * 360) / data.incomeCategoryTotals.length}, 70%, 50%)`
+                            )
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        radius: '100%',
+                        cutout: '70%',
+                        plugins: {
+                            legend: {display: false},
+                            htmlLegend: {containerID: 'incomeCategoryLegend'},
+                            centerText: {
+                                text: `Ingresos\n\n$${formatCurrency(data.ingresos)}`,
+                                color: '#007c2d'
+                            }
+                        }
+                    },
+                    plugins: [htmlLegendPlugin, centerTextPlugin]
+                });
                 if (expenseChart) expenseChart.destroy();
                 expenseChart = new Chart(ctxExpense, {
                     type: 'doughnut',
@@ -182,38 +212,8 @@
                     },
                     plugins: [htmlLegendPlugin, centerTextPlugin]
                 });
-
-                if (incomeChart) incomeChart.destroy();
-                incomeChart = new Chart(ctxIncome, {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.incomeCategoryLabels.map((label, i) =>
-                            `${label}: $${formatCurrency(data.incomeCategoryTotals[i])}`
-                        ),
-                        datasets: [{
-                            data: data.incomeCategoryTotals,
-                            backgroundColor: data.incomeCategoryTotals.map((_, i) =>
-                                `hsl(${(i * 360) / data.incomeCategoryTotals.length}, 70%, 50%)`
-                            )
-                        }]
-                    },
-                    options: {
-                        responsive: false,
-                        maintainAspectRatio: false,
-                        radius: '100%',
-                        cutout: '70%',
-                        plugins: {
-                            legend: {display: false},
-                            htmlLegend: {containerID: 'incomeCategoryLegend'},
-                            centerText: {
-                                text: `Ingresos\n\n$${formatCurrency(data.ingresos)}`,
-                                color: '#007c2d'
-                            }
-                        }
-                    },
-                    plugins: [htmlLegendPlugin, centerTextPlugin]
-                });
-
+            }
+            function renderMonthChart(data) {
                 if (monthlyChart) monthlyChart.destroy();
                 monthlyChart = new Chart(ctxMonthly, {
                     type: 'bar',
@@ -238,7 +238,6 @@
                     },
                     options: {responsive: true, maintainAspectRatio: false}
                 });
-
             }
 
             function updateInfo(data) {
@@ -257,7 +256,9 @@
                 }
             }
 
-            async function fetchDashboardData() {
+
+
+            async function fetchDateDashboardData() {
                 const params = {
                     start_date: document.getElementById('start_date').value,
                     end_date: document.getElementById('end_date').value,
@@ -266,21 +267,37 @@
                 };
                 try {
                     const {data} = await axios.get("{{ route('dashboard.data') }}", {params});
-                    renderCharts(data);
+                    renderDateCharts(data);
                     updateInfo(data);
                 } catch (e) {
                     console.error(e);
                 }
             }
+            async function fetchMonthDashboardData() {
+                const params = {
+                    start_date: document.getElementById('start_date').value,
+                    end_date: document.getElementById('end_date').value,
+                    month_from: document.getElementById('month_from').value,
+                    month_to: document.getElementById('month_to').value
+                };
+                try {
+                    const {data} = await axios.get("{{ route('dashboard.data') }}", {params});
+                    renderMonthChart(data);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+
 
             document.getElementById('dateFilterForm').addEventListener('submit', e => {
                 e.preventDefault();
-                fetchDashboardData();
+                fetchDateDashboardData();
             });
 
             document.getElementById('monthFilterForm').addEventListener('submit', e => {
                 e.preventDefault();
-                fetchDashboardData();
+                fetchMonthDashboardData();
             });
 
             document.querySelectorAll('.nav-month').forEach(link => {
@@ -288,7 +305,7 @@
                     e.preventDefault();
                     document.getElementById('start_date').value = link.dataset.start;
                     document.getElementById('end_date').value = link.dataset.end;
-                    fetchDashboardData();
+                    fetchDateDashboardData();
                 });
             });
 
@@ -314,10 +331,11 @@
             };
 
            // Render charts and update info with initial data
-            renderCharts(initialData);
+            renderDateCharts(initialData);
+            renderMonthChart(initialData)
             updateInfo(initialData);
 
-            fetchDashboardData()
+
 
         });
 
