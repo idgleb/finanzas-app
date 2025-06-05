@@ -138,7 +138,7 @@ class PaymentController extends Controller
                     // Actualizar el plan del usuario a PRO
                     $user = Auth::user();
                     $planPro = Plan::getProPlan();
-                    
+
                     if ($planPro) {
                         $user->plan_id = $planPro->id;
                         $user->save();
@@ -345,7 +345,7 @@ class PaymentController extends Controller
         $plan = Plan::getProPlan();
 
         if (!$plan) {
-            return redirect()->route('home')->with('error', 'El plan PRO no está disponible en este momento.');
+            return redirect()->route('welcome')->with('error', 'El plan PRO no está disponible en este momento.');
         }
 
         return view('categories.pro-required', compact('plan'));

@@ -14,15 +14,6 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Log;
 
-// Rutas de pagos
-Route::middleware(['auth'])->group(function () {
-    Route::get('/payments/pro-required', [PaymentController::class, 'proRequired'])->name('payments.pro-required');
-    Route::post('/payments/process', [PaymentController::class, 'process'])->name('payments.process');
-    Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
-    Route::get('/payments/failure', [PaymentController::class, 'failure'])->name('payments.failure');
-    Route::get('/payments/pending', [PaymentController::class, 'pending'])->name('payments.pending');
-});
-
 // Webhook de Mercado Pago (debe ser público)
 Route::post('/payments/webhook', [PaymentController::class, 'webhook'])
     ->name('payments.webhook')
@@ -36,14 +27,13 @@ Route::get('/', function () {
 // Rutas públicas
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 
-// Ruta de prueba para el webhook
-Route::get('/payments/webhook-test', function() {
-    Log::info('Test webhook endpoint hit');
-    return response()->json(['status' => 'test successful']);
-})->withoutMiddleware(['web']);
-
 // Ruta de prueba POST para el webhook
-Route::post('/payments/webhook-test', function() {
+Route::match(['get', 'post'], '/payments/webhook-test', function() {
+    if (request()->isMethod('get')) {
+        // Si es GET, redirige a la página principal o cualquier otra
+        return redirect('/');
+    }
+    // Si es POST, registra y responde
     Log::info('Test webhook POST endpoint hit', [
         'payload' => request()->all(),
         'headers' => request()->headers->all()
@@ -67,8 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
 
     // Rutas de pago
+    Route::get('/payments/pro-required', [PaymentController::class, 'proRequired'])->name('payments.pro-required');
+    Route::post('/payments/process', [PaymentController::class, 'process'])->name('payments.process');
+    Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
+    Route::get('/payments/failure', [PaymentController::class, 'failure'])->name('payments.failure');
+    Route::get('/payments/pending', [PaymentController::class, 'pending'])->name('payments.pending');
+
     Route::get('/payments', [PaymentController::class, 'index'])
         ->name('payments.index');
+
 });
 
 // Rutas de administración (admin)
