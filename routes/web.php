@@ -15,31 +15,15 @@ use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Log;
 
 // Webhook de Mercado Pago (debe ser público)
-Route::post('/payments/webhook', [PaymentController::class, 'webhook'])
+Route::match(['get', 'post'],'/payments/webhook', [PaymentController::class, 'webhook'])
     ->name('payments.webhook')
     ->withoutMiddleware(['web']);
 
 // Página de bienvenida
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', function () {return view('welcome');})->name('welcome');
 
 // Rutas públicas
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-
-// Ruta de prueba POST para el webhook
-Route::match(['get', 'post'], '/payments/webhook-test', function() {
-    if (request()->isMethod('get')) {
-        // Si es GET, redirige a la página principal o cualquier otra
-        return redirect('/');
-    }
-    // Si es POST, registra y responde
-    Log::info('Test webhook POST endpoint hit', [
-        'payload' => request()->all(),
-        'headers' => request()->headers->all()
-    ]);
-    return response()->json(['status' => 'test successful']);
-})->withoutMiddleware(['web']);
 
 // Rutas protegidas (usuario autenticado)
 Route::middleware('auth')->group(function () {

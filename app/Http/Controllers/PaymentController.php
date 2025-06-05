@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 // 1) Configuración
+use MercadoPago\Client\MerchantOrder\MerchantOrderClient;
 use MercadoPago\MercadoPagoConfig;
 
 // 2) Cliente de preferencias
@@ -191,6 +192,11 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
+        if (request()->isMethod('get')) {
+            // Si es GET, redirige a la página principal o cualquier otra
+            return redirect('/');
+        }
+
         Log::info('Webhook recibido de Mercado Pago', [
             'payload' => $request->all(),
             'headers' => $request->headers->all(),
@@ -222,7 +228,7 @@ class PaymentController extends Controller
                     try {
                         Log::info('Obteniendo información de merchant_order', ['merchant_order_id' => $merchantOrderId]);
 
-                        $client = new \MercadoPago\Client\MerchantOrder\MerchantOrderClient();
+                        $client = new MerchantOrderClient();
                         $order = $client->get($merchantOrderId);
 
                         if ($order && !empty($order->payments)) {
@@ -269,7 +275,12 @@ class PaymentController extends Controller
                 Log::info('Obteniendo información del pago', ['payment_id' => $paymentId]);
 
                 $client = new PaymentClient();
+
+                Log::info('new PaymentClient()', ['client' => $client]);
+
                 $payment = $client->get($paymentId);
+
+                Log::info('$payment', ['payment' => $client]);
 
                 Log::info('Información del pago obtenida', [
                     'payment_id' => $paymentId,
