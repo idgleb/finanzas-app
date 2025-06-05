@@ -94,10 +94,6 @@
                 items.forEach(item => {
                     const li = document.createElement('li');
                     li.className = 'px-2 flex items-center cursor-pointer';
-                    li.onclick = () => {
-                        chart.toggleDataVisibility(item.index);
-                        chart.update();
-                    };
 
                     const box = document.createElement('span');
                     box.className = 'w-3 h-3 mr-1 inline-block';
@@ -107,6 +103,16 @@
 
                     const text = document.createElement('span');
                     text.textContent = item.text;
+
+                    if (item.hidden) {
+                        text.classList.add('line-through');
+                    }
+
+                    li.onclick = () => {
+                        chart.toggleDataVisibility(item.index);
+                        text.classList.toggle('line-through');
+                        chart.update();
+                    };
 
                     li.appendChild(box);
                     li.appendChild(text);
