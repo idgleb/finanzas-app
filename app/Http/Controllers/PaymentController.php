@@ -30,7 +30,17 @@ class PaymentController extends Controller
 
     public function index()
     {
-        return view('payments.index');
+        $plan = Plan::getProPlan();
+
+        if (!$plan) {
+            return redirect()->route('welcome')->with('error', 'El plan PRO no está disponible en este momento.');
+        }
+
+        if (auth()->user()->isPro()) {
+            return redirect()->route('welcome')->with('error', 'Ya tienes el plan PRO.');
+        }
+
+        return view('payments.index', compact('plan'));
     }
 
     public function process(Request $request)
@@ -346,6 +356,10 @@ class PaymentController extends Controller
 
         if (!$plan) {
             return redirect()->route('welcome')->with('error', 'El plan PRO no está disponible en este momento.');
+        }
+
+        if (auth()->user()->isPro()) {
+            return redirect()->route('welcome')->with('error', 'Ya tienes el plan PRO.');
         }
 
         return view('categories.pro-required', compact('plan'));
